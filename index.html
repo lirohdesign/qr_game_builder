@@ -19,7 +19,7 @@
 
   <div id="cw-body">
 
-    <div id="form" class="p50 w750">
+    <div id="form" method="post" class="p50 w750">
 
       <!-- Container for app -->
 
@@ -104,10 +104,15 @@
           "#btn-undo": function(d, v) {
             if (null != v) this.my.undo();
           },
-          "#btn-submit": function(d, v) {
-            if (null != v) console.log("submit");
+          "#btn-submit": {
+            bind: function(d, v) {
+              if (v != null) $.post("https://emag-rq.herokuapp.com/post-test", this.my.data({date_created: Date.now()}));
+//              if (v != null) console.log(JSON.stringify(this.my.data({date_created: Date.now()})));
+            },
+            events: "click.my"
           }
         },
+
         S2: function($o) {
           $o.select2({
             minimumResultsForSearch: 120
@@ -125,7 +130,7 @@
             photo_link: "",
             location: "",
             details: [{
-              name: ""
+              clue: ""
             }]
           },
           ui: {
@@ -180,10 +185,10 @@
               $form.html(this.RowHTML);
             },
             data: {
-              name: ""
+              clue: ""
             },
             ui: {
-              "#name": "name",
+              "#clue": "clue",
               "#btn-removeRow": {
                 bind: function(d, v) {
                   if (v != null) this.my.remove();
@@ -213,10 +218,10 @@
             <div id="details" class="cb detailslist"></div>\
       			<span id="btn-addDetails" \
       				class="pseudolink ml20 mt10 mb10 small">Add details</span>',
-          Details: '<div style="padding:4px 2px 0 2px">{name}</div>',
+          Details: '<div style="padding:4px 2px 0 2px">{clue}</div>',
           RowHTML: '<div class="dib avt w100p pt2 pb2">\
       			<span class="dib fi-list dragger pr5 lh130 vam"></span> \
-      			<input type="text" id="name" class="w400 mr10 mt0 fs90" \
+      			<input type="text" id="clue" class="w400 mr10 mt0 fs90" \
       				placeholder="Clue Details">\
       			<span id="btn-removeRow" class="fi-x mt1 salmon p5 lh100 fr" \
       				style="cursor:pointer"></span>\
